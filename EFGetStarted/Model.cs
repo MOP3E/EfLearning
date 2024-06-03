@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,16 @@ using System.Threading.Tasks;
 
 namespace EFGetStarted
 {
+    public class BloggingContextFactory : IDesignTimeDbContextFactory<BloggingContext>
+    {
+        public BloggingContext CreateDbContext(string[] args)
+        {
+            DbContextOptionsBuilder<BloggingContext> optionsBuilder = new DbContextOptionsBuilder<BloggingContext>();
+            optionsBuilder.UseSqlite("Data Source=blogging.db");
+            return new BloggingContext(optionsBuilder.Options);
+        }
+    }
+
     /// <summary>
     /// ???
     /// </summary>
@@ -38,7 +49,7 @@ namespace EFGetStarted
         }
 
         //создать файл БД SQLITE в папке локальных данных программ
-        protected override void OnConfiguring(DbContextOptionsBuilder options) => options.UseSqlite($"Data Source={DbFile}");
+        //protected override void OnConfiguring(DbContextOptionsBuilder options) => options.UseSqlite($"Data Source={DbFile}");
     }
 
     /// <summary>
