@@ -33,9 +33,9 @@ namespace EFGetStarted
             DbFile = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "blogging.db");
         }
 
-        //public BloggingContext(DbContextOptions<BloggingContext> options) : base(options)
-        //{
-        //}
+        public BloggingContext(DbContextOptions<BloggingContext> options) : base(options)
+        {
+        }
 
         //создать файл БД SQLITE в папке локальных данных программ
         protected override void OnConfiguring(DbContextOptionsBuilder options) => options.UseSqlite($"Data Source={DbFile}");

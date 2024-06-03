@@ -50,6 +50,7 @@ namespace EFGetStarted
             //db.Remove(blog);
             //db.SaveChanges();
 
+            Console.ReadLine();
         }
     }
 }
