@@ -7,25 +7,18 @@ namespace EFGetStarted
     {
         static void Main(string[] args)
         {
-            string dbFile = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "blogging.db");
-
+            //настройка объекта для доступа к базе данных
             DbContextOptions<BloggingContext> contextOptions = new DbContextOptionsBuilder<BloggingContext>()
-                .UseSqlite($"Data Source={dbFile}")
+                .UseSqlite($"Data Source={BloggingContext.DbFile}")
                 .Options;
+            Console.WriteLine($"Путь к базе данных: {BloggingContext.DbFile}.");
 
-            //объект для доступа к базе данных
+            //осздание объекта для доступа к базе данных - создание нового файла БД либо подключение к существующему
             using BloggingContext db = new(contextOptions);
 
+            //применение миграций к базе данных
             db.Database.Migrate();
-
-            //ВАЖНО: в этом примере ожидается, что база данных уже создана и существует
-            Console.WriteLine($"Путь к базе данных: {dbFile}.");
-
-            ////создание содержимого базы данных
-            //db.Database.ExecuteSqlRaw(
-            //    "CREATE TABLE IF NOT EXISTS \"__EFMigrationsHistory\" (\r\n    \"MigrationId\" TEXT NOT NULL CONSTRAINT \"PK___EFMigrationsHistory\" PRIMARY KEY,\r\n    \"ProductVersion\" TEXT NOT NULL\r\n);\r\n\r\nBEGIN TRANSACTION;\r\n\r\nCREATE TABLE \"Blogs\" (\r\n    \"BlogId\" INTEGER NOT NULL CONSTRAINT \"PK_Blogs\" PRIMARY KEY AUTOINCREMENT,\r\n    \"Url\" TEXT NULL\r\n);\r\n\r\nCREATE TABLE \"Posts\" (\r\n    \"PostId\" INTEGER NOT NULL CONSTRAINT \"PK_Posts\" PRIMARY KEY AUTOINCREMENT,\r\n    \"Title\" TEXT NULL,\r\n    \"Content\" TEXT NULL,\r\n    \"BlogId\" INTEGER NOT NULL,\r\n    CONSTRAINT \"FK_Posts_Blogs_BlogId\" FOREIGN KEY (\"BlogId\") REFERENCES \"Blogs\" (\"BlogId\") ON DELETE CASCADE\r\n);\r\n\r\nCREATE INDEX \"IX_Posts_BlogId\" ON \"Posts\" (\"BlogId\");\r\n\r\nINSERT INTO \"__EFMigrationsHistory\" (\"MigrationId\", \"ProductVersion\")\r\nVALUES ('20240603105431_InitialCreate', '8.0.6');\r\n\r\nCOMMIT;\r\n\r\n"
-            //);
-
+            
             //создание нового блога
             Console.WriteLine("Создание нового блога");
             db.Add(new Blog { Url = "http://blogs.msdn.com/adonet" });

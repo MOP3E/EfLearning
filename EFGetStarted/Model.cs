@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace EFGetStarted
 {
+    /// <summary>
+    /// Фабрика классов для BloggingContext. Нужна для работы инструментов EF Core.
+    /// </summary>
     public class BloggingContextFactory : IDesignTimeDbContextFactory<BloggingContext>
     {
         public BloggingContext CreateDbContext(string[] args)
@@ -19,7 +22,7 @@ namespace EFGetStarted
     }
 
     /// <summary>
-    /// ???
+    /// Класс для доступа к базе данных (контекст).
     /// </summary>
     public class BloggingContext : DbContext
     {
@@ -36,20 +39,15 @@ namespace EFGetStarted
         /// <summary>
         /// Файл БД SQLITE.
         /// </summary>
-        public string DbFile { get; }
+        public static string DbFile => Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "blogging.db");
 
-        public BloggingContext()
+        public BloggingContext() : base()
         {
-            //настройка полного имени файла БД SQLITE
-            DbFile = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "blogging.db");
         }
 
         public BloggingContext(DbContextOptions<BloggingContext> options) : base(options)
         {
         }
-
-        //создать файл БД SQLITE в папке локальных данных программ
-        //protected override void OnConfiguring(DbContextOptionsBuilder options) => options.UseSqlite($"Data Source={DbFile}");
     }
 
     /// <summary>
